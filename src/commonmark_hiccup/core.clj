@@ -14,7 +14,7 @@
                       org.commonmark.node.Text              :node-literal
                       org.commonmark.node.BulletList        [:ul :content]
                       org.commonmark.node.OrderedList       [:ol {:start :node-startNumber} :content]
-                      org.commonmark.node.ListItem          [:li :content-tight]
+                      org.commonmark.node.ListItem          [:li :content]
                       org.commonmark.node.BlockQuote        [:blockquote :content]
                       org.commonmark.node.HtmlBlock         :node-literal
                       org.commonmark.node.HtmlInline        :node-literal
@@ -34,7 +34,7 @@
 (defn- children
   "Returns a seq of the children of a commonmark-java AST node."
   [node]
-  (take-while some? (iterate #(when % (.getNext %)) (.getFirstChild node))))
+  (take-while some? (iterate #(.getNext %) (.getFirstChild node))))
 
 (defn- text-content
   "Recursively walks over the given commonmark-java AST node depth-first,
@@ -64,6 +64,11 @@
   (update (property-map node) :node-literal hiccup.util/escape-html))
 (defmethod node-properties org.commonmark.node.OrderedList [node]
   (update (property-map node) :node-startNumber #(when (< 1 %) %)))
+(defmethod node-properties org.commonmark.node.ListItem [node]
+  (let [parent (.getParent node)
+        tight? (and (instance? org.commonmark.node.ListBlock parent)
+                    (.isTight parent))]
+    (assoc (property-map node) :content (if tight? :content-tight :content))))
 
 (defn- string-fuse
   "Takes a seq and joins its elements into a single string. If a keyword

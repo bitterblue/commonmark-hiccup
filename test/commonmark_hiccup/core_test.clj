@@ -51,13 +51,16 @@
   (testing "renders blockquotes"
     (is (= (markdown->html "> This is a\n> blockquote!")
            "<blockquote><p>This is a blockquote!</p></blockquote>")))
-  (testing "renders lists"
+  (testing "renders tight lists"
     (is (= (markdown->html "- foo\n- bar\n- baz")
            "<ul><li>foo</li><li>bar</li><li>baz</li></ul>"))
     (is (= (markdown->html "1. foo\n2. bar")
            "<ol><li>foo</li><li>bar</li></ol>"))
     (is (= (markdown->html "1. foo\n2. bar\n3) baz")
            "<ol><li>foo</li><li>bar</li></ol><ol start=\"3\"><li>baz</li></ol>")))
+  (testing "renders loose lists"
+    (is (= (markdown->html "- foo\n\n- bar\n\n- baz")
+           "<ul><li><p>foo</p></li><li><p>bar</p></li><li><p>baz</p></li></ul>")))
   (testing "renders HTML blocks"
     (is (= (markdown->html "<script>alert('Test');</script>")
            "<script>alert('Test');</script>")))

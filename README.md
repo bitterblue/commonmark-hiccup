@@ -42,7 +42,7 @@ user=> (markdown->html "This is a *test*.")
 ```
 
 You can pass a configuration to the converter to tweak the output. This example
-renders paragraphs without the surrounding `<p></p>` tags.
+renders paragraphs without the surrounding `<p></p>` tags:
 
 ```clojure
 user=> (let [config (update-in commonmark-hiccup.core/default-config
@@ -65,7 +65,7 @@ CommonMark AST nodes are rendered:
                       org.commonmark.node.Text              :node-literal
                       org.commonmark.node.BulletList        [:ul :content]
                       org.commonmark.node.OrderedList       [:ol {:start :node-startNumber} :content]
-                      org.commonmark.node.ListItem          [:li :content-tight]
+                      org.commonmark.node.ListItem          [:li :content]
                       org.commonmark.node.BlockQuote        [:blockquote :content]
                       org.commonmark.node.HtmlBlock         :node-literal
                       org.commonmark.node.HtmlInline        :node-literal
@@ -83,15 +83,16 @@ CommonMark AST nodes are rendered:
                       org.commonmark.node.HardLineBreak     [:br]}}})
 ```
 
-The `:nodes` map uses commonmark-java node classes as keys. The values are just
-Clojure data structures. Some keywords and lists are replaced during rendering:
+The `:nodes` map uses [commonmark-java][3] node classes as keys. The values are
+just Clojure data structures. Some keywords and lists are replaced during
+rendering:
 
 * All keywords prefixed with `:node-` are replaced with the respective property
   of the rendered node (e.g. `:node-literal` for `org.commonmark.node.HtmlBlock`
   is replaced with the value returned by `HtmlBlock::getLiteral`).
-* Some keywords are special: `content` is replaced with the rendered content of
-  the current node's children; `text-content` is replaced with the concatenated
-  content of all `org.commonmark.node.Text` child nodes.
+* Some keywords are special: `:content` is replaced with the rendered content
+  of the current node's children; `:text-content` is replaced with the
+  concatenated content of all `org.commonmark.node.Text` child nodes.
 * List elements are joined to strings. This is useful for rendering node
   properties as part of a longer string. `['(:h :node-level) :content]`
   uses the `level` property of the `Heading` node to render the appropriate HTML
