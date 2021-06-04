@@ -14,7 +14,7 @@ on [Hiccup][2] as an intermediary representation.
 
 Add the following dependency to `project.clj`:
 
-    [commonmark-hiccup "0.1.0"]
+    [commonmark-hiccup "0.2.0"]
 
 
 ## Documentation
