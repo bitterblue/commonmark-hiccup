@@ -21,7 +21,9 @@
                       org.commonmark.node.FencedCodeBlock   [:pre [:code {:class :node-info} :node-literal]]
                       org.commonmark.node.IndentedCodeBlock [:pre [:code :node-literal]]
                       org.commonmark.node.Code              [:code :node-literal]
-                      org.commonmark.node.Link              [:a {:href :node-destination} :content]
+                      org.commonmark.node.Link              [:a {:href :node-destination
+                                                                 :title :node-title} 
+                                                             :content]
                       org.commonmark.node.Image             [:img {:src   :node-destination
                                                                    :alt   :text-content
                                                                    :title :node-title}]
