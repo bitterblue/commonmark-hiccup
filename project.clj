@@ -1,4 +1,4 @@
-(defproject commonmark-hiccup "0.2.0"
+(defproject commonmark-hiccup "0.3.0-SNAPSHOT"
   :description "Library to render CommonMark markdown to customizable HTML."
   :url "https://github.com/bitterblue/commonmark-hiccup"
   :license {:name "Eclipse Public License"
@@ -8,4 +8,3 @@
                  [hiccup "1.0.5"]]
   :repositories [["releases" {:url "https://repo.clojars.org"
                               :creds :gpg}]])
-

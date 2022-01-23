@@ -29,7 +29,8 @@
                       org.commonmark.node.StrongEmphasis    [:strong :content]
                       org.commonmark.node.ThematicBreak     [:hr]
                       org.commonmark.node.SoftLineBreak     " "
-                      org.commonmark.node.HardLineBreak     [:br]}}})
+                      org.commonmark.node.HardLineBreak     [:br]}}
+   :parser   {:extensions nil}})
 
 (defn- children
   "Returns a seq of the children of a commonmark-java AST node."
@@ -86,19 +87,22 @@
          (walk/postwalk #(if (= :text-content %) (text-content node) %))
          (walk/postwalk #(if (list? %) (string-fuse %) %)))))
 
-(defn- parse-markdown [s]
-  (let [parser (.build (Parser/builder))]
+(defn- parse-markdown
+  [config s]
+  (let [exts (seq (get-in config [:parser :extensions]))
+        parser (cond-> (Parser/builder)
+                 exts (.extensions exts)
+                 true (.build))]
     (.parse parser s)))
 
 (defn markdown->hiccup
   "Takes a string of markdown and converts it to Hiccup. Optionally takes a configuration
   map, allowing customization of the Hiccup output."
   ([s]        (markdown->hiccup default-config s))
-  ([config s] (render-node config (parse-markdown s))))
+  ([config s] (render-node config (parse-markdown config s))))
 
 (defn markdown->html
   "Takes a string of markdown and converts it to HTML. Optionally takes a configuration
   map, allowing customization of the HTML output."
   ([s]        (markdown->html default-config s))
   ([config s] (hiccup/html (markdown->hiccup config s))))
-

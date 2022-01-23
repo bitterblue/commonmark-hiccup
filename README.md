@@ -82,7 +82,8 @@ CommonMark AST nodes are rendered:
                       org.commonmark.node.StrongEmphasis    [:strong :content]
                       org.commonmark.node.ThematicBreak     [:hr]
                       org.commonmark.node.SoftLineBreak     " "
-                      org.commonmark.node.HardLineBreak     [:br]}}})
+                      org.commonmark.node.HardLineBreak     [:br]}}
+   :parser   {:extensions nil}})
 ```
 
 The `:nodes` map uses [commonmark-java][3] node classes as keys. The values are
@@ -103,6 +104,40 @@ rendering:
 For the available properties for each node type, refer to
 the [commonmark-java][3] sources.
 
+#### Extensions
+
+CommonMark [extensions](https://github.com/commonmark/commonmark-java#extensions)
+can be added to the parser by including them in the `[:parser :extensions]`
+list.
+
+For example, to add the support for GFM tables:
+
+1. Add the dependency to your project
+```clojure
+[com.atlassian.commonmark/commonmark-ext-gfm-tables "..."]
+```
+
+2. Add the extension to your config along with the new renderers
+```clojure
+(require '[commonmark-hiccup.core :as md])
+(def my-config
+     (-> md/default-config
+         (update-in [:parser :extensions] conj
+                    (org.commonmark.ext.gfm.tables.TablesExtension/create))
+         (update-in [:renderer :nodes] merge
+                    {org.commonmark.ext.gfm.tables.TableBlock [:table :content]
+                     org.commonmark.ext.gfm.tables.TableHead  [:thead :content]
+                     org.commonmark.ext.gfm.tables.TableBody  [:tbody :content]
+                     org.commonmark.ext.gfm.tables.TableRow   [:tr :content]
+                     org.commonmark.ext.gfm.tables.TableCell  [:td :content]})))
+
+(md/markdown->hiccup mt-config "|head1|head2|
+|---|---|
+|foo|bar|")
+=> ([:table
+     ([:thead ([:tr ([:td ("head1")] [:td ("head2")])])]
+      [:tbody ([:tr ([:td ("foo")] [:td ("bar")])])])])
+```
 
 ## License
 
