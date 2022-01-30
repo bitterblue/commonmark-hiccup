@@ -104,6 +104,7 @@ rendering:
 For the available properties for each node type, refer to
 the [commonmark-java][3] sources.
 
+
 #### Extensions
 
 CommonMark [extensions](https://github.com/commonmark/commonmark-java#extensions)
@@ -139,9 +140,11 @@ For example, to add the support for GFM tables:
       [:tbody ([:tr ([:td ("foo")] [:td ("bar")])])])])
 ```
 
+
 ## License
 
 Copyright © 2017 Axel Schüssler
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
+

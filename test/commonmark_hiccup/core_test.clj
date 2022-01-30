@@ -74,3 +74,16 @@
     (is (= (markdown->html "This is a\\\nline with\\\nhard line breaks.")
            "<p>This is a<br />line with<br />hard line breaks.</p>"))))
 
+(deftest commonmark-extensions-test
+  (testing "renders tables"
+    (let [config (-> default-config
+                     (update-in [:parser :extensions] conj
+                                (org.commonmark.ext.gfm.tables.TablesExtension/create))
+                     (update-in [:renderer :nodes] merge
+                                {org.commonmark.ext.gfm.tables.TableBlock [:table :content]
+                                 org.commonmark.ext.gfm.tables.TableHead  [:thead :content]
+                                 org.commonmark.ext.gfm.tables.TableBody  [:tbody :content]
+                                 org.commonmark.ext.gfm.tables.TableRow   [:tr :content]
+                                 org.commonmark.ext.gfm.tables.TableCell  [:td :content]}))]
+      (is (= (markdown->html config "|head1|head2|\n|---|---|\n|foo|bar|")
+             "<table><thead><tr><td>head1</td><td>head2</td></tr></thead><tbody><tr><td>foo</td><td>bar</td></tr></tbody></table>")))))

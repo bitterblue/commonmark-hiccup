@@ -7,4 +7,5 @@
                  [com.atlassian.commonmark/commonmark "0.17.0"]
                  [hiccup "1.0.5"]]
   :repositories [["releases" {:url "https://repo.clojars.org"
-                              :creds :gpg}]])
+                              :creds :gpg}]]
+  :profiles {:dev {:dependencies [[com.atlassian.commonmark/commonmark-ext-gfm-tables "0.17.0"]]}})
