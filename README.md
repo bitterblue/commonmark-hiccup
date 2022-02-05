@@ -1,6 +1,6 @@
 # commonmark-hiccup
 
-[![Build Status](https://travis-ci.org/bitterblue/commonmark-hiccup.svg?branch=master)](https://travis-ci.org/bitterblue/commonmark-hiccup)
+![build](https://github.com/bitterblue/commonmark-hiccup/actions/workflows/clojure.yml/badge.svg)
 
 A small Clojure library for converting [CommonMark][1] markdown to HTML. It is
 designed to make the HTML output as configurable as possible, relying
